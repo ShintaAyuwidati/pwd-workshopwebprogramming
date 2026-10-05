@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Workshop Web Programming</title>
+
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+
+    <style>
+        body {
+            font-family: "Courier New", monospace;
+            background: #ffd6e7;
+            padding: 30px;
+        }
+
+        .container {
+            background: #fff;
+            width: 420px;
+            margin: auto;
+            padding: 25px;
+            border: 5px solid #ffeb7c;
+            box-shadow: 8px 8px 0 #ffeb7c;
+        }
+
+        h1 {
+            text-align: center;
+            color: #ff4f9a;
+            font-size: 24px;
+            
+        }
+
+        label {
+            display: block;
+            margin-top: 12px;
+            font-weight: bold;
+        }
+
+        input[type="text"],
+        select {
+            width: 100%;
+            padding: 10px;
+            margin-top: 5px;
+            box-sizing: border-box;
+            border: 3px solid #aaaaaa;
+            font-family: "Courier New", monospace;
+            font-size: 14px;
+        }
+
+        input[type="checkbox"] {
+            width: auto;
+            margin-right: 5px;
+        }
+
+        input[type="text"]:focus,
+        select:focus {
+            outline: none;
+            border-color: #ff4f9a;
+        }
+
+        .error {
+            color: #e00000;
+            font-size: 13px;
+            font-weight: bold;
+            margin: 4px 0 8px;
+            min-height: 16px;
+        }
+
+        button {
+            width: 100%;
+            padding: 12px;
+            margin-top: 10px;
+            background: #87bcf5;
+            color: white;
+            border: 3px solid #000000;
+            box-shadow: 4px 4px 0 #000000;
+            font-family: "Courier New", monospace;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background: #ff4f9a;
+            color: white;
+        }
+
+        .konfirmasi {
+            margin-top: 25px;
+            padding: 18px;
+            background: #d9fff2;
+            border: 4px solid #000000;
+            box-shadow: 5px 5px 0 #000000;
+        }
+
+        .konfirmasi h2 {
+            margin-top: 0;
+            color: #ff4f9a;
+            text-align: center;
+    
+        }
+
+        .konfirmasi p {
+            margin: 8px 0;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="container">
+
+    <h1>★ WORKSHOP WEB ★</h1>
+
+    <form id="formWorkshop">
+
+        <label>Nama</label>
+        <input type="text" id="nama">
+        <p id="errNama" class="error"></p>
+
+        <label>Email</label>
+        <input type="text" id="email">
+        <p id="errEmail" class="error"></p>
+
+        <label>No. HP</label>
+        <input type="text" id="hp">
+        <p id="errHp" class="error"></p>
+
+        <label>Sesi</label>
+        <select id="sesi">
+            <option value="">-- Pilih Sesi --</option>
+            <option value="Pagi">Pagi</option>
+            <option value="Siang">Siang</option>
+            <option value="Malam">Malam</option>
+        </select>
+        <p id="errSesi" class="error"></p>
+
+        <label>
+            <input type="checkbox" id="persetujuan">
+            Saya menyetujui pendaftaran
+        </label>
+        <p id="errPersetujuan" class="error"></p>
+
+        <button type="submit">[ DAFTAR ]</button>
+
+    </form>
+
+    <div id="hasilKonfirmasi"></div>
+
+</div>
+
+<script>
+
+$(document).ready(function() {
+
+    $("#formWorkshop").submit(function(event) {
+
+        event.preventDefault();
+
+        var nama = $("#nama").val().trim();
+        var email = $("#email").val().trim();
+        var hp = $("#hp").val().trim();
+        var sesi = $("#sesi").val();
+        var setuju = $("#persetujuan").prop("checked");
+
+        var valid = true;
+
+        $(".error").text("");
+        $("#hasilKonfirmasi").empty();
+
+        // VALIDASI NAMA
+        if (nama == "") {
+            $("#errNama").text("✖ Nama wajib diisi");
+            valid = false;
+        } else if (nama.length < 3) {
+            $("#errNama").text("✖ Nama minimal 3 karakter");
+            valid = false;
+        }
+
+        // VALIDASI EMAIL
+        if (email == "") {
+            $("#errEmail").text("✖ Email wajib diisi");
+            valid = false;
+        } else if (email.indexOf("@") == -1 || email.indexOf(".") == -1) {
+            $("#errEmail").text("✖ Format email tidak valid");
+            valid = false;
+        }
+
+        // VALIDASI NO HP
+        if (hp == "") {
+            $("#errHp").text("✖ No. HP wajib diisi");
+            valid = false;
+        } else if (isNaN(hp)) {
+            $("#errHp").text("✖ No. HP harus berupa angka");
+            valid = false;
+        }
+
+        // VALIDASI SESI
+        if (sesi == "") {
+            $("#errSesi").text("✖ Silakan pilih sesi");
+            valid = false;
+        }
+
+        // VALIDASI PERSETUJUAN
+        if (setuju == false) {
+            $("#errPersetujuan").text(
+                "✖ Anda harus menyetujui pendaftaran"
+            );
+            valid = false;
+        }
+
+        // JIKA SEMUA VALID
+        if (valid) {
+
+            var kartu = $("<div>")
+                .addClass("konfirmasi");
+
+            $("<h2>")
+                .text("★ PENDAFTARAN BERHASIL!")
+                .appendTo(kartu);
+
+            $("<p>")
+                .text("Nama: " + nama)
+                .appendTo(kartu);
+
+            $("<p>")
+                .text("Email: " + email)
+                .appendTo(kartu);
+
+            $("<p>")
+                .text("No. HP: " + hp)
+                .appendTo(kartu);
+
+            $("<p>")
+                .text("Sesi: " + sesi)
+                .appendTo(kartu);
+
+            $("#hasilKonfirmasi").append(kartu);
+
+            $("#formWorkshop").trigger("reset");
+        }
+
+    });
+
+});
+
+</script>
+
+</body>
+</html>
